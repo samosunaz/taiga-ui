@@ -20,6 +20,7 @@ import {
     TuiDestroyService,
     TuiMapper,
     TuiMonth,
+    tuiPure,
     watch,
 } from '@taiga-ui/cdk';
 import {TUI_DEFAULT_MARKER_HANDLER, TuiMarkerHandler} from '@taiga-ui/core';
@@ -108,6 +109,14 @@ export class TuiPrimitiveCalendarRangeComponent implements OnInit {
             : this.userViewedMonthSecond;
     }
 
+    get secondMaxViewedMonth(): TuiMonth {
+        return this.calculateMonthOffsetSecond(this.cappedUserViewedMonthFirst);
+    }
+
+    get firstMinViewedMonth(): TuiMonth {
+        return this.calculateMonthOffsetFirst(this.cappedUserViewedMonthSecond);
+    }
+
     ngOnInit() {
         this.updateViewedMonths();
     }
@@ -145,5 +154,15 @@ export class TuiPrimitiveCalendarRangeComponent implements OnInit {
         if (this.userViewedMonthFirst.monthSame(this.userViewedMonthSecond)) {
             this.userViewedMonthSecond = this.userViewedMonthSecond.append({month: 1});
         }
+    }
+
+    @tuiPure
+    private calculateMonthOffsetSecond(value: TuiMonth): TuiMonth {
+        return value.append({month: -1});
+    }
+
+    @tuiPure
+    private calculateMonthOffsetFirst(value: TuiMonth): TuiMonth {
+        return value.append({month: 1});
     }
 }
